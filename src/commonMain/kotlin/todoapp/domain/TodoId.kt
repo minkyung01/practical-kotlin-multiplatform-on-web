@@ -38,12 +38,17 @@ data class TodoId(val value: String) {
     }
 }
 
-interface TodoIdGenerator {
+expect interface TodoIdGenerator {
+    // expect 키워드를 활용해 플랫폼 추상화 매커니즘을 활용할 것임을 선언
+    // 개별 플랫폼 별로 실체화된 코드가 따로 존재함을, 코틀린 컴파일러에게 알려주는 것
+    // common 모듈 내에는 실체화된 코드 존재하지 않게 됨
 
-    fun generateId(): TodoId
+    open fun generateId(): TodoId
 }
 
-class RandomTodoIdGenerator: TodoIdGenerator {
+class UUIDTodoIdGenerator : TodoIdGenerator
+
+class RandomTodoIdGenerator: TodoIdGenerator { // 36자리의 random한 문자열 생성
 
     private val CHARACTERS : List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
     override fun generateId() = (1..36)

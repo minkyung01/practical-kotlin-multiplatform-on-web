@@ -10,6 +10,7 @@ import org.springframework.web.reactive.config.WebFluxConfigurer
 import todoapp.application.DefaultTodoManager
 import todoapp.application.support.TransactionalTodoManager
 import todoapp.domain.RandomTodoIdGenerator
+import todoapp.domain.UUIDTodoIdGenerator
 import todoapp.serializer.Serializers
 import todoapp.web.IndexRouter
 import todoapp.web.TodoRouter
@@ -24,13 +25,15 @@ class TodoServerApplication
  */
 fun main(args: Array<String>) {
     val applicationBeans = beans {
+        // 2개의 bean 선언
         bean {
             DefaultTodoManager(
-                todoIdGenerator = RandomTodoIdGenerator(),
+                // todoIdGenerator = RandomTodoIdGenerator(),
+                todoIdGenerator = UUIDTodoIdGenerator(), // uuid 활용하도록 변경
                 todoRepository = ref()
             )
         }
-        bean(isPrimary = true) {
+        bean(isPrimary = true) { // spring 기술이 적용된 manager가 먼저 사용되도록 isPrimary = true 설정
             val todoManager = ref<DefaultTodoManager>()
             TransactionalTodoManager(
                 find = todoManager,

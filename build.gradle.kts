@@ -167,6 +167,7 @@ kotlin {
             dependencies {
                 dependsOn(commonMain)
 
+                // react 관련 dependencies
                 implementation("org.jetbrains.kotlinx:kotlinx-html-js")
 
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-react")
@@ -178,7 +179,7 @@ kotlin {
 
                 implementation("io.github.microutils:kotlin-logging-js")
 
-                implementation(npm("uuid", "8.3.2"))
+                implementation(npm("uuid", "8.3.2")) // uuid 활용을 위해 외부 npm 의존성 추가
                 implementation(npm("is-sorted", "1.0.5"))
             }
         }

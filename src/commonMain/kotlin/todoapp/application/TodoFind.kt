@@ -24,5 +24,5 @@ interface TodoFind {
      *
      * @return 할 일
      */
-    suspend fun byId(id: TodoId): Todo
+    suspend fun byId(id: TodoId): Todo // suspend: 비동기적으로 동작할 것임을 의미
 }

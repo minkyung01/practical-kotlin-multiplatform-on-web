@@ -70,11 +70,11 @@ class HttpClientTodoManager(
     }
 
     data class WebAPIProperties(
-        val findAllUrl: String =  "http://localhost:8080/api/todos",
-        val findByIdUrl: String =  "http://localhost:8080/api/todos/{id}",
-        val registerUrl: String = "http://localhost:8080/api/todos",
-        val modifyUrl: String = "http://localhost:8080/api/todos/{id}",
-        val clearUrl: String = "http://localhost:8080/api/todos/{id}",
-        val clearCompletedUrl: String = "http://localhost:8080/api/todos/clear-completed",
+        val findAllUrl: String =  "http://localhost:8080/api/todos", // 전체 조회
+        val findByIdUrl: String =  "http://localhost:8080/api/todos/{id}", // 단건 조회
+        val registerUrl: String = "http://localhost:8080/api/todos", // 생성
+        val modifyUrl: String = "http://localhost:8080/api/todos/{id}", // 수정
+        val clearUrl: String = "http://localhost:8080/api/todos/{id}", // 단건 삭제
+        val clearCompletedUrl: String = "http://localhost:8080/api/todos/clear-completed", // 다건 삭제
     )
 }

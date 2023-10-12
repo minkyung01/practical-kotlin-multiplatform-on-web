@@ -13,7 +13,7 @@ class IndexRouterSpec : FunSpec({
 
     test("`/` 경로로 접근시 인덱스 페이지 보여주기") {
         client.get().uri("/")
-            .accept(TEXT_HTML)
+            .accept(TEXT_HTML) // TEXT_HTML 형태의 파일을 요청
             .exchange()
             .expectAll(
                 { it.expectStatus().isOk },

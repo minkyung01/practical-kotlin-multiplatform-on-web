@@ -1,4 +1,4 @@
-@file:JsModule("uuid")
+@file:JsModule("uuid") // js module의 uuid 파일을 가져와서 활용
 @file:JsNonModule
 
 package external.uuid

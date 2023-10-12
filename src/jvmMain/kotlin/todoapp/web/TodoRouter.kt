@@ -1,5 +1,6 @@
 package todoapp.web
 
+import io.ktor.client.request.*
 import mu.KLogging
 import org.springframework.web.reactive.function.server.*
 import todoapp.application.TodoCleanup
@@ -26,19 +27,19 @@ class TodoRouter(
 
     private val validator = WriteTodoCommandValidator()
 
-    private val delegate = coRouter {
+    private val delegate = coRouter { // 코틀린의 coroutine 기반 router - 비동미
         "/api/todos".nest {
             GET("") {
                 ok().bodyValueAndAwait(find.all())
             }
 
-            // TODO 할 일 일련번호로 할 일을 조회하는 HandlerFunction을 작성하세요
-            // 요청 : GET /{id}
-            // 응답 : Todo Instance
-            // 귀뜸: TodoFind 인터페이스가 제공하는 byId 메서드를 이용해보세요
+            GET("/{id}") { request ->
+                val id = TodoId(request.pathVariable("id"))
+                ok().bodyValueAndAwait(find.byId(id))
+            }
 
             POST("") { request ->
-                val command = request.awaitBody<WriteTodoCommand>().apply {
+                val command = request.awaitBody<WriteTodoCommand>().apply { // WriteTodoCommand 객체로 가져옴
                     validator.process(target = this)
                 }
 
@@ -46,21 +47,26 @@ class TodoRouter(
                     created(URI.create("/api/todos/$it")).bodyValueAndAwait(it)
                 }
             }
+
             PUT("/{id}") { request ->
                 val id = TodoId(request.pathVariable("id"))
-                val command = request.awaitBody<WriteTodoCommand>()
-
-                // TODO command 객체 값을 검증하세요
-                // 귀띔: 할 일 등록하기 핸들러의 코드를 잘 살펴보세요
+                val command = request.awaitBody<WriteTodoCommand>().apply {
+                    validator.process(target = this)
+                }
 
                 modification.modify(id, command.text, command.completed)
                 ok().bodyValueAndAwait(find.byId(id))
             }
 
-            // TODO 할 일을 정리하는 HandlerFunction을 작성하세요
-            // 요청 : DELETE /{id}
-            // 응답 : Unit
-            // 귀뜸: TodoCleanup 인터페이스가 제공하는 clear 메서드를 이용해보세요
+            DELETE("/{id}") { request ->
+                // 아래 로직을 이렇게도 작성할 수 있음
+                // cleanup.clear(TodoId(request.pathVariable("id")))
+
+                val id = TodoId(request.pathVariable("id"))
+
+                cleanup.clear(id)
+                ok().buildAndAwait() // response: Unit (응답 값이 없음을 의미)
+            }
 
             POST("/clear-completed") {
                 cleanup.clearAllCompleted()

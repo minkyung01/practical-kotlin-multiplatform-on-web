@@ -8,6 +8,8 @@ import todoapp.domain.*
  *
  * @author springrunner.kr@gmail.com
  */
+// spring은 jvm 기반이기 때문에 common module 상에서는 spring 프레임워크를 활용할 수는 없음
+// why? common 모듈은 js/jvm 모두를 위한 코드가 작성되기 때문
 internal class DefaultTodoManager(
     private val todoIdGenerator: TodoIdGenerator,
     private val todoRepository: TodoRepository

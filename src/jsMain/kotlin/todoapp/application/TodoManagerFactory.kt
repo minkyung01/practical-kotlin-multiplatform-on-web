@@ -6,6 +6,7 @@ import io.ktor.serialization.kotlinx.json.*
 import org.w3c.dom.url.URLSearchParams
 import todoapp.application.support.InMemoryTodoManager
 import todoapp.domain.RandomTodoIdGenerator
+import todoapp.domain.UUIDTodoIdGenerator
 import todoapp.serializer.Serializers
 import todoapp.web.client.HttpClientTodoManager
 
@@ -14,8 +15,8 @@ import todoapp.web.client.HttpClientTodoManager
  */
 object TodoManagerFactory {
 
-    fun create(params: URLSearchParams) = when(params.get("mode")) {
-        "remote" -> UseCases.of(
+    fun create(params: URLSearchParams) = when(params.get("mode")) { // mode에 따라 서로 다른 manager를 사용하도록
+        "remote" -> UseCases.of( // mode = remote인 경우 - http://localhost:8080/?mode=remote
             HttpClientTodoManager(
                 httpClient = HttpClient(io.ktor.client.engine.js.Js) {
                     install(ContentNegotiation) {
@@ -27,7 +28,8 @@ object TodoManagerFactory {
         )
         else -> UseCases.of(
             InMemoryTodoManager(
-                todoIdGenerator = RandomTodoIdGenerator()
+                // todoIdGenerator = RandomTodoIdGenerator()
+                todoIdGenerator = UUIDTodoIdGenerator() // uuid 활용하도록 변경
             )
         )
     }

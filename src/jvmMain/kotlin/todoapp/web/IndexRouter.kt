@@ -16,9 +16,9 @@ import org.springframework.web.reactive.function.server.router
 class IndexRouter : RouterFunction<ServerResponse> {
 
     private val delegate = router {
-        accept(MediaType.TEXT_HTML).nest {
-            GET("/") {
-                ok().contentType(MediaType.TEXT_HTML).bodyValue(indexHtml)
+        accept(MediaType.TEXT_HTML).nest { // 클라이언트가 TEXT_HTML을 컨텐츠로 요청했을 때, 처리할 내용
+            GET("/") {// 요청의 method/url 정보
+                ok().contentType(MediaType.TEXT_HTML).bodyValue(indexHtml) // 요청 처리의 결과를 response로
             }
         }
     }
@@ -32,9 +32,13 @@ class IndexRouter : RouterFunction<ServerResponse> {
                 link(href = "/webjars/todomvc-app-css/2.4.1/index.css", rel = "stylesheet")
             }
             body {
-                // TODO 다음 HTML 태그를 작성하세요
                 // <div id="root"></div>
                 // <script src="/main.js"></script>
+                //// 아래는 위 html 코드를 dsl을 활용해 작성한 것
+                div {
+                    id = "root"
+                }
+                script(src = "/main.js") {}
             }
         }
     }
